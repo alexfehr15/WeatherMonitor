@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Weather Monitor</string>
+    <string name="choice_prompt">Select a choice</string>
+    <string-array name="choices">
+        <item>Personal Weather Station</item>
+        <item>City State</item>
+    </string-array>
 </resources>
