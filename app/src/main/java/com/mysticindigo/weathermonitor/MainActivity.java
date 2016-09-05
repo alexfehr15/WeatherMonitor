@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     // Array of strings...
@@ -35,12 +38,22 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.weather_list);
 
         DataHolder data = new DataHolder(this);
-        DataHolder data1 = new DataHolder(this);
+        ArrayList<DataHolder> dataHolderArrayList = new ArrayList<DataHolder>();
+        dataHolderArrayList.add((data));
+        /*DataHolder data1 = new DataHolder(this);
         DataHolder data2 = new DataHolder(this);
         DataHolder data3 = new DataHolder(this);
         DataHolder data4 = new DataHolder(this);
+        DataHolder data5 = new DataHolder(this);
+        DataHolder data6 = new DataHolder(this);
+        DataHolder data7 = new DataHolder(this);
+        DataHolder data8 = new DataHolder(this);
+        DataHolder data9 = new DataHolder(this);
+        DataHolder data10 = new DataHolder(this);
+        DataHolder data11 = new DataHolder(this);*/
 
-        DataAdapter d = new DataAdapter(this, R.layout.activity_weatherlistview, new DataHolder[] { data, data1, data2, data3, data4 });
+        // DataAdapter d = new DataAdapter(this, R.layout.activity_weatherlistview, new DataHolder[] { data });
+        DataAdapter d = new DataAdapter(this, R.layout.activity_weatherlistview, dataHolderArrayList);
 
         listView.setAdapter(d);
     }

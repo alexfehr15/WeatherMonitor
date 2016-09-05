@@ -12,10 +12,18 @@
     </Spinner>
 
     <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/label"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight=".75"
-    android:maxLines="1" >
+        android:id="@+id/label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".5"
+        android:maxLines="1" >
     </EditText>
+
+    <Button xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="OK">
+    </Button>
 </LinearLayout>

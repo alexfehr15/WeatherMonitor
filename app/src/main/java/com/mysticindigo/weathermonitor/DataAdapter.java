@@ -5,10 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
 
 /**
  * Created by Alex on 7/18/2016.
@@ -17,7 +21,7 @@ public class DataAdapter extends ArrayAdapter<DataHolder> {
 
     private AppCompatActivity myContext;
 
-    public DataAdapter(AppCompatActivity context, int editTextResourceId, DataHolder[] objects) {
+    public DataAdapter(AppCompatActivity context, int editTextResourceId, ArrayList<DataHolder> objects) {
         super(context, editTextResourceId, objects);
         myContext = context;
     }
@@ -25,52 +29,67 @@ public class DataAdapter extends ArrayAdapter<DataHolder> {
     // We keep this ViewHolder object to save time. It's quicker than findViewById() when repainting.
     static class ViewHolder {
         protected DataHolder data;
-        protected EditText text;
         protected Spinner spin;
+        protected EditText text;
+        protected Button button;
+    }
+
+    public void addNewItem(DataHolder newRow) {
+        // items represents List<RowData> in your Adapter class
+        this.add(newRow);
+
+        // sends request to update ListAdapter
+        notifyDataSetChanged();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = null;
+        View view = convertView;
+        System.out.println("getView " + position + " " + convertView);
 
         // Check to see if this row has already been painted once.
-        if (convertView == null) {
-
+        if (view == null) {
             // If it hasn't, set up everything:
-            LayoutInflater inflator = myContext.getLayoutInflater();
-            view = inflator.inflate(R.layout.activity_weatherlistview, null);
+            // LayoutInflater inflator = myContext.getLayoutInflater();
+            // view = inflator.inflate(R.layout.activity_weatherlistview, null);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.activity_weatherlistview, parent, false);
 
-            // Make a new ViewHolder for this row, and modify its data and spinner:
-            final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.text = (EditText) view.findViewById(R.id.label);
-            viewHolder.data = new DataHolder(myContext);
+            /*final ViewHolder viewHolder = new ViewHolder();
+            viewHolder.data = new DataHolder(getContext());
             viewHolder.spin = (Spinner) view.findViewById(R.id.spin);
             viewHolder.spin.setAdapter(viewHolder.data.getAdapter());
-
-            // Used to handle events when the user changes the Spinner selection:
-            /*viewHolder.spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                    viewHolder.data.setSelected(arg2);
-                    viewHolder.text.setText(viewHolder.data.getText());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> arg0) {
-                }
-
-            });*/
-
-            // Update the EditText to reflect what's in the Spinner
-            // viewHolder.text.setText(viewHolder.data.getText());
-
-            view.setTag(viewHolder);
-
-            Log.d("DBGINF", viewHolder.text.getText() + "");
-        } else {
-            view = convertView;
+            viewHolder.text = (EditText) view.findViewById(R.id.label);
+            viewHolder.button = (Button) view.findViewById(R.id.button);*/
         }
+
+        // Make a new ViewHolder for this row, and modify its data and spinner:
+        final ViewHolder viewHolder = new ViewHolder();
+        viewHolder.data = new DataHolder(getContext());
+        viewHolder.spin = (Spinner) view.findViewById(R.id.spin);
+        viewHolder.spin.setAdapter(viewHolder.data.getAdapter());
+        viewHolder.spin.setSelection(getItem(position).getSelected());
+        viewHolder.text = (EditText) view.findViewById(R.id.label);
+        viewHolder.text.setText(getItem(position).getText());
+        viewHolder.button = (Button) view.findViewById(R.id.button);
+
+        viewHolder.button.setOnClickListener(new AdapterView.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v == viewHolder.button){
+                    viewHolder.spin.setEnabled(false);
+                    viewHolder.text.setEnabled(false);
+                    viewHolder.button.setEnabled(false);
+                    addNewItem(new DataHolder(getContext()));
+                }
+            }
+        });
+
+        view.setTag(viewHolder);
+
+        Log.d("DBGINF", viewHolder.text.getText() + "");
+
+        // Update the EditText to reflect what's in the Spinner
+        // viewHolder.text.setText(viewHolder.data.getText());
 
         // This is what gets called every time the ListView refreshes
         // ViewHolder holder = (ViewHolder) view.getTag();
